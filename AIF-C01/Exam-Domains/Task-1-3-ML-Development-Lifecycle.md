@@ -747,6 +747,44 @@ pipeline.upsert(role_arn=role)
 
 ---
 
+## Well-Architected ML Lifecycle Components
+
+The AWS Well-Architected Machine Learning Lens defines cross-cutting components that span multiple lifecycle phases:
+
+### Feature Store (Online & Offline)
+- **Purpose**: Centralized repository for reusable, consistent features across teams and projects
+- **Online Store**: Low-latency retrieval for real-time inference
+- **Offline Store**: Historical feature values for training and batch scoring
+- **Benefit**: Eliminates duplication and need to rerun feature engineering code
+- **AWS Service**: SageMaker Feature Store
+
+### Model Registry
+- **Purpose**: Repository for storing ML model artifacts + metadata (data, code, model)
+- **Capabilities**: Version control, lineage tracking, approval workflows
+- **Tracks**: Model versions, training data references, hyperparameters, evaluation metrics
+- **AWS Service**: SageMaker Model Registry
+
+### Lineage Tracker
+- **Purpose**: Enables reproducible ML experiences — recreate any point-in-time environment
+- **Tracks**:
+  - **System Architecture**: Infrastructure as Code (IaC) to address environment drift
+  - **Data**: Metadata, values, and features
+  - **Model**: Algorithm, features, parameters, and hyperparameters
+  - **Code**: Implementation, modeling, and pipeline code
+- **AWS Service**: SageMaker ML Lineage Tracking
+
+### Feedback Loops
+- **Performance Feedback Loop**: Informs data preparation based on model evaluation during development
+- **Model Drift Feedback Loop**: Informs data preparation based on model evaluation during production deployment
+- **Key Insight**: Feedback loops are the key enablers for monitoring and continuous improvement
+
+### Alarm Manager & Scheduler
+- **Alarm Manager**: Receives alerts from monitoring → publishes notifications → triggers retraining pipeline
+- **Scheduler**: Initiates model retraining at business-defined intervals
+- **AWS Services**: CloudWatch Alarms, EventBridge, SNS
+
+---
+
 ## MLOps: Automating the Lifecycle
 
 ### MLOps Principles
@@ -756,6 +794,16 @@ pipeline.upsert(role_arn=role)
 - **Monitoring**: Continuous observation
 - **Collaboration**: Team coordination
 
+### MLOps Maturity Levels
+
+| Level | Description | Characteristics |
+|-------|-------------|----------------|
+| **Level 0** | Manual | Manual data prep, training, deployment. No CI/CD. Notebook-driven. |
+| **Level 1** | ML Pipeline Automation | Automated training pipeline, continuous training (CT), experiment tracking. Manual deployment. |
+| **Level 2** | CI/CD Pipeline Automation | Full CI/CD/CT. Automated testing, deployment, monitoring. Feature store. Model registry. |
+
+**Exam Tip**: Know the progression — most organizations start at Level 0 and mature toward Level 2. The exam tests understanding of what each level provides.
+
 ### MLOps Components
 
 **1. Version Control**
@@ -764,11 +812,12 @@ pipeline.upsert(role_arn=role)
 - Models (Model Registry)
 - Experiments (SageMaker Experiments)
 
-**2. CI/CD for ML**
-- Automated testing
-- Automated training
-- Automated deployment
-- Rollback capabilities
+**2. CI/CD/CT for ML**
+- **CI**: Automated testing of code and data
+- **CD**: Automated deployment of models and pipelines
+- **CT**: Continuous Training — automatically retrain when data or code changes
+- Source data is a first-class input alongside source code
+- Pipelines must version ML models, inputs, and outputs for traceability
 
 **3. Infrastructure as Code**
 - CloudFormation
@@ -785,8 +834,17 @@ pipeline.upsert(role_arn=role)
 - **SageMaker Model Registry**: Model versioning
 - **SageMaker Projects**: MLOps templates
 - **SageMaker Feature Store**: Feature management
+- **SageMaker Experiments**: Experiment tracking
+- **SageMaker ML Lineage Tracking**: Artifact lineage
 - **CodePipeline**: CI/CD
 - **CloudFormation**: Infrastructure as code
+
+### MLOps Benefits (per AWS)
+- **Productivity**: Self-service environments with curated datasets
+- **Repeatability**: Automated, repeatable training → evaluation → deployment
+- **Reliability**: CI/CD for quality and consistency
+- **Auditability**: Versioned inputs/outputs demonstrate exactly how model was built
+- **Data & Model Quality**: Enforce policies against bias, track data statistics and model quality over time
 
 ---
 
@@ -901,6 +959,20 @@ D) SageMaker Clarify
 
 ---
 
+## Drift Types Summary
+
+| Drift Type | Definition | Detection | Impact |
+|-----------|-----------|-----------|--------|
+| **Data Drift** | Input data distribution changes vs. training data | Compare inference data statistics to training baseline | Model predictions become unreliable |
+| **Concept Drift** | Relationship between features and target changes | Monitor model quality metrics over time | Model learns wrong patterns |
+| **Model Drift** | Model performance degrades over time | Track accuracy, precision, recall trends | Business KPIs impacted |
+| **Feature Attribution Drift** | Feature importance/contribution changes | Monitor SHAP values over time | Model explanations become invalid |
+| **Bias Drift** | Fairness metrics change over time | Monitor bias metrics per demographic group | Responsible AI violations |
+
+**Exam Tip**: Data drift and concept drift are the most commonly tested. Data drift = input changes. Concept drift = the "rules" change (e.g., fraud patterns evolve).
+
+---
+
 ## Study Tips
 
 1. **Understand the complete flow**: Don't just memorize phases, understand why each is necessary
@@ -910,3 +982,14 @@ D) SageMaker Clarify
 5. **Understand iteration**: ML is iterative, not linear
 6. **Know when to retrain**: Scheduled vs. triggered retraining
 7. **Master data splitting**: Especially for time-series data
+8. **Feature Store**: Know online (real-time) vs. offline (batch/training) stores
+9. **Lineage Tracking**: Understand it enables reproducibility across the entire lifecycle
+10. **MLOps Maturity**: Know the 3 levels (Manual → Pipeline Automation → CI/CD Automation)
+
+---
+
+## Citations
+- [ML Lifecycle Architecture Diagram - AWS Well-Architected ML Lens](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/architecture-diagram.html)
+- [Monitoring - AWS Well-Architected ML Lens](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html)
+- [Why Should You Use MLOps? - Amazon SageMaker](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-why.html)
+- [Implement MLOps - Amazon SageMaker AI](https://docs.aws.amazon.com/sagemaker/latest/dg/mlops.html)
