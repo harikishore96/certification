@@ -1,0 +1,5 @@
+- AWS Skill Builder
+- AWS Power Hour - Twitch, YouTube, LinkdIN
+- Udemy - Stephane Maarek
+- YouTube - KodeKloud, Tech With Lucy
+- https://github.com/vicsz/aif-c01-study-notes

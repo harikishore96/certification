@@ -1,0 +1,44 @@
+# Revision Backlog - AIF-C01
+- Model Fit, Bias, and Variance
+- Supervised, Unsupervised, Self-Supervised
+- Reinforcement, Reinforcement Learning from Human Feedback
+- Confusion Matrix
+- Precision, Recall, F1 Score, Accuracy
+- AUC-ROC - Area under the curve-receiver operator curve
+- ~~MAE - Mean Absolute Error~~ ✅ (covered in ML-Regression.md)
+- ~~MAPE - Mean Absolute Percentage Error~~ ✅ (covered in ML-Regression.md)
+- ~~RMSE - Root mean squared error~~ ✅ (covered in ML-Regression.md)
+- ~~R Squared~~ ✅ (covered in ML-Regression.md)
+- ~~Regression Metrics~~ ✅ (covered in ML-Regression.md)
+- SageMaker JumpStart Foundation Models
+- SageMaker Model Deployment Comparison / Inference
+- SageMaker - Clarify
+- SageMaker - Ground Truth
+- SageMaker DeepAR
+- SageMaker Pipelines steps
+- SageMaker Model Monitor vs Clarify
+- SageMaker Studio, Canvas
+- AWS Config, Amazon Inspector, AWS Audit Manager, AWS Artifact, AWS CloudTrail, AWS Trusted Advisor
+- Amazon Macie
+- AWS Config
+- Amazon Inspector
+- Security Hub
+- EventBridge
+- AWS CloudTrail
+- AWS Artifact
+- AWS Audit Manager
+- AWS Trusted Advisor
+- Top K, Temperature, Top P
+- BERTScore, Mean squared error (MSE), Perplexity, F1 score
+- Recall, F1 score, ROUGE-N
+- model evaluation metrics
+- Chain of thought
+- Improve Tasks,
+    - 1.3 Describe the ML development lifecycle.
+    - 2.1 Explain the basic concepts of generative AI.
+    - 3.1 Describe design considerations for applications that use foundation models.
+    - 3.2 Choose effective prompt engineering techniques.
+    - 3.3 Describe the training and fine-tuning process for foundation models.
+    - 3.4 Describe methods to evaluate foundation model performance.
+    - 4.1 Explain the development of AI systems that are responsible.
+    - 4.2 Recognize the importance of transparent and explainable models.
