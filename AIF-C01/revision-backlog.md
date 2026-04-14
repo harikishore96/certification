@@ -29,7 +29,7 @@
 - AWS Audit Manager
 - AWS Trusted Advisor
 - Top K, Temperature, Top P
-- BERTScore, Mean squared error (MSE), Perplexity, F1 score
+- ~~BERTScore~~, Mean squared error (MSE), Perplexity, F1 score ✅ (BERTScore covered in BERTScore-vs-RMSE-vs-MAPE.md + FM-Evaluation-Metrics.md)
 - Recall, F1 score, ROUGE-N
 - model evaluation metrics
 - Chain of thought

@@ -72,10 +72,13 @@ Fine-tuning/Customization → Deployment → Feedback → Iteration
 
 | Type | Description | Examples |
 |---|---|---|
-| **Large Language Models (LLMs)** | Text-in, text-out; trained on text corpora | Claude, Llama, Titan Text, Mistral |
-| **Multimodal Models** | Handle multiple modalities (text + image + audio + video) | Claude 3 (vision), Titan Multimodal Embeddings, Nova |
-| **Diffusion Models** | Generate images/video from noise via iterative denoising | Stable Diffusion, Titan Image Generator |
-| **Embedding Models** | Convert inputs to vector representations for search/similarity | Titan Text Embeddings, Cohere Embed |
+| **Large Language Models (LLMs)** | Text-in, text-out; trained on text corpora | Claude, Llama, Titan Text, Mistral, DeepSeek, Qwen |
+| **Multimodal Models** | Handle multiple modalities (text + image + audio + video) | Claude (vision), Nova Pro/Lite, Llama 4, Pixtral |
+| **Diffusion Models** | Generate images/video from noise via iterative denoising | Stable Diffusion, Titan Image Generator, Nova Canvas |
+| **Embedding Models** | Convert inputs to vector representations for search/similarity | Titan Text Embeddings, Cohere Embed, Nova Multimodal Embeddings, Marengo Embed |
+| **Speech Models** | Process or generate speech/audio | Nova Sonic, Voxtral |
+| **Video Models** | Generate video from text/image prompts | Nova Reel, Luma Ray |
+| **Reranking Models** | Re-score and reorder search results for relevance | Amazon Rerank, Cohere Rerank |
 
 ### Transformer Architecture (Exam Essentials)
 - **Self-Attention Mechanism** — Allows model to weigh importance of different parts of input
@@ -103,12 +106,38 @@ Token Generation → De-tokenization → Output (Text/Image/Embeddings)
 ```
 
 ### Integration Points
-- **Amazon Bedrock** — Managed access to FMs (Claude, Titan, Llama, Mistral, Cohere, Stability AI)
+- **Amazon Bedrock** — Managed access to FMs from 17+ providers (see Model Providers table below)
 - **Amazon SageMaker JumpStart** — Deploy and fine-tune open-source FMs
 - **Amazon SageMaker Canvas** — No-code FM access for business users
 - **Amazon Bedrock Knowledge Bases** — RAG with FMs
 - **Amazon Bedrock Agents** — Multi-step task execution with FMs
 - **Amazon Bedrock Guardrails** — Content filtering and safety for FM outputs
+- **Cross-Region Inference Profiles** — Route inference across multiple regions for availability and throughput
+
+### Amazon Bedrock Model Providers (as of 2025)
+
+| Provider | Key Models | Modalities |
+|---|---|---|
+| **Amazon** | Nova Micro/Lite/Pro/Premier, Nova Canvas, Nova Reel, Nova Sonic, Titan Text/Embeddings/Image | Text, Image, Video, Speech, Embedding |
+| **Anthropic** | Claude Haiku, Sonnet, Opus (4.x series) | Text, Image → Text |
+| **Meta** | Llama 3.x, Llama 4 Scout/Maverick | Text, Image → Text |
+| **Mistral AI** | Mistral Large 3, Mixtral, Ministral, Pixtral, Devstral, Voxtral | Text, Image, Speech → Text |
+| **Cohere** | Command R/R+, Embed v4, Rerank 3.5 | Text, Image → Text, Embedding |
+| **AI21 Labs** | Jamba 1.5 Large/Mini | Text → Text |
+| **Stability AI** | Stable Diffusion 3.5, Stable Image (Core, Ultra, Inpaint, etc.) | Text, Image → Image |
+| **DeepSeek** | DeepSeek-R1 (reasoning), DeepSeek-V3.x | Text → Text |
+| **Google** | Gemma 3 (4B, 12B, 27B) | Text, Image → Text |
+| **Qwen** | Qwen3 (32B, 235B), Qwen3-Coder, Qwen3-VL | Text, Image → Text |
+| **NVIDIA** | Nemotron Nano (9B, 12B, 30B) | Text, Image → Text |
+| **OpenAI** | GPT-OSS (20B, 120B), GPT-OSS Safeguard | Text → Text |
+| **Luma AI** | Ray v2 | Text → Video |
+| **MiniMax** | MiniMax M2/M2.1 | Text → Text |
+| **Moonshot AI** | Kimi K2 Thinking, Kimi K2.5 | Text, Image → Text |
+| **TwelveLabs** | Marengo Embed, Pegasus | Text, Image, Speech, Video → Text, Embedding |
+| **Writer** | Palmyra X4/X5 | Text → Text |
+| **Z.AI** | GLM 4.7/4.7 Flash | Text → Text |
+
+> **Exam Tip**: You don't need to memorize every model. Know that Bedrock provides access to multiple third-party and first-party FMs, and understand the modality categories (text, image, video, speech, embedding).
 
 ---
 
@@ -174,6 +203,19 @@ Prompt Engineering → RAG → Fine-tuning → Continued Pre-training → Pre-tr
 | **A/B Testing** | Compare models with production traffic |
 | **Adversarial Testing** | Test edge cases, jailbreaks, harmful inputs |
 
+### Advanced FM Concepts (from AWS Well-Architected GenAI Lens)
+
+| Concept | Definition | Exam Relevance |
+|---|---|---|
+| **Quantization** | Reducing precision of model parameters (e.g., FP32 → INT8) to decrease memory and compute requirements | Cost optimization, edge deployment |
+| **Model Gateway** | Interaction layer offering secure access to a model hub through standardized APIs | Enterprise architecture |
+| **Model Hub** | Central repository providing access to FMs from first-party, third-party, and open-source providers (e.g., Bedrock) | Service selection |
+| **LLMOps / GenAIOps** | Operational practices for managing FM lifecycle: selection, data prep, deployment, monitoring, governance | Operations, MLOps |
+| **Prompt Catalog** | Centralized repository for storing, managing, and versioning prompts | Governance, reusability |
+| **Knowledge Graph** | Structured representation of entities and relationships; enhances FM contextual understanding | RAG enhancement |
+| **Zero-shot Learning** | Model performs tasks it was never explicitly trained on, without task-specific examples | FM capability |
+| **Model Card** | Document with key info about a model: intended use, training data, performance, limitations, biases | Responsible AI, governance |
+
 ### FM Evaluation Metrics
 
 | Metric | Use Case | Description |
@@ -203,6 +245,8 @@ Prompt Engineering → RAG → Fine-tuning → Continued Pre-training → Pre-tr
 - **Bias** — Reflects biases in training data
 - **Cost** — Large models are expensive to run at scale
 - **Context Window Limits** — Cannot process unlimited input
+- **Toxicity** — May generate harmful, offensive, or inappropriate content
+- **Data Privacy** — Risk of memorizing and reproducing training data (PII leakage)
 
 ---
 
@@ -222,8 +266,11 @@ Prompt Engineering → RAG → Fine-tuning → Continued Pre-training → Pre-tr
 - **Temperature = 0 is NOT truly deterministic** in all models, but produces most consistent outputs
 - **More parameters ≠ always better** — Smaller models can outperform larger ones for specific tasks
 - **Distillation** — Creates a smaller model from a larger one; NOT the same as fine-tuning
+- **Quantization ≠ Distillation** — Quantization reduces numerical precision; distillation trains a new smaller model
 - **ROUGE is for summarization, BLEU is for translation** — Don't mix them up
 - **Embeddings are NOT generative** — They produce vector representations, not text/images
+- **Cross-Region Inference ≠ Multi-Region Deployment** — Cross-region inference profiles route requests across regions automatically for availability
+- **Reranking models** improve search relevance but do NOT generate text — they re-score existing results
 
 ### Comparison Points
 
@@ -260,13 +307,29 @@ Need to customize FM output?
 
 ```
 What is your primary need?
-├── Text generation/chat/summarization → LLM (Claude, Titan Text, Llama, Mistral)
+├── Text generation/chat/summarization → LLM (Claude, Llama, Mistral, DeepSeek, Qwen)
 ├── Image generation → Diffusion model (Stable Diffusion, Titan Image Generator, Nova Canvas)
-├── Text + Image understanding → Multimodal model (Claude 3, Nova)
-├── Semantic search/similarity → Embedding model (Titan Embeddings, Cohere Embed)
-├── Code generation → Code-optimized LLM (Claude, Llama)
-└── Video/Audio generation → Multimodal generative (Nova Reel, Stability)
+├── Text + Image understanding → Multimodal model (Claude, Nova Pro/Lite, Llama 4, Pixtral)
+├── Semantic search/similarity → Embedding model (Titan Embeddings, Cohere Embed v4, Nova Multimodal Embeddings)
+├── Code generation → Code-optimized LLM (Claude, Devstral, Qwen3-Coder)
+├── Video generation → Video model (Nova Reel, Luma Ray)
+├── Speech-to-speech/text → Speech model (Nova Sonic, Voxtral)
+├── Video understanding → Video model (Pegasus, Nova Pro/Lite)
+├── Advanced reasoning → Reasoning model (DeepSeek-R1, Kimi K2 Thinking)
+└── Reranking search results → Reranking model (Amazon Rerank, Cohere Rerank)
 ```
+
+### Model Selection: Functional Requirements Mapping (AWS Prescriptive Guidance)
+
+When selecting an FM, map requirements across three dimensions:
+1. **Functional Requirements** — Non-negotiable capabilities (multimodal support, function-calling, domain-specific pre-training, language support)
+2. **Performance vs. Cost Trade-offs** — Balance model intelligence against operational costs; test smaller variants to understand quality degradation curve
+3. **Latency Considerations** — Real-time apps need sub-second responses; analytical tasks can tolerate multi-second latencies
+
+**Common Pitfalls to Avoid:**
+- Don't over-optimize prematurely — PoC phase is about proving feasibility
+- Don't ignore specialized models — Test domain-specific models early
+- Don't assume bigger is better — Smaller models with well-crafted prompts can outperform larger ones
 
 ---
 
@@ -426,10 +489,23 @@ D) Pre-train a custom foundation model from scratch
 | **Fine-tuning** | Train with labeled data → changes model weights |
 | **Continued Pre-training** | Train with unlabeled domain data → domain adaptation |
 | **Distillation** | Large model teaches small model → faster, cheaper |
+| **Quantization** | Reduce parameter precision → smaller, faster model |
 | **RLHF** | Human feedback to align model behavior |
 | **Hallucination** | Model generates plausible but incorrect information |
 | **Embeddings** | Vector representations for search/similarity (NOT generative) |
+| **GenAIOps/LLMOps** | Operational practices for FM lifecycle management |
+| **Model Gateway** | Secure API layer for accessing model hub |
+| **Cross-Region Inference** | Route requests across regions for availability |
+| **Bedrock Providers** | 17+ providers: Amazon, Anthropic, Meta, Mistral, Cohere, AI21, Stability, DeepSeek, Google, Qwen, NVIDIA, OpenAI, Luma, MiniMax, Moonshot, TwelveLabs, Writer, Z.AI |
 
 ---
 
 **Exam Tip**: The AIF-C01 heavily tests your ability to choose the RIGHT customization approach (prompt engineering vs. RAG vs. fine-tuning vs. continued pre-training) based on the scenario. Always start with the simplest, cheapest approach and escalate only when needed. Remember: RAG for current/external data, fine-tuning for behavior changes, continued pre-training for domain vocabulary.
+
+---
+
+## Citations
+- [Supported foundation models in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html)
+- [Definitions - AWS Well-Architected Generative AI Lens](https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/definitions.html)
+- [Choosing models for generative AI applications - AWS Prescriptive Guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-lifecycle-operational-excellence/dev-experimenting-model-selection.html)
+- [Layer 2: Approved set of foundation models and tools - AWS Prescriptive Guidance](https://docs.aws.amazon.com/prescriptive-guidance/latest/strategy-enterprise-ready-gen-ai-platform/model.html)

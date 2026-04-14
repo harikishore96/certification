@@ -14,32 +14,42 @@
 - [Amazon Bedrock](Generative-AI-Services/Amazon-Bedrock.md)
 - [Amazon Nova](Generative-AI-Services/Amazon-Nova.md)
 
-## ML Services (6)
+## ML Services (7)
 - [Amazon SageMaker](ML-Services/Amazon-SageMaker.md)
 - [Amazon SageMaker Assets](ML-Services/Amazon-SageMaker-Assets.md)
 - [Amazon SageMaker Canvas](ML-Services/Amazon-SageMaker-Canvas.md)
 - [Amazon SageMaker Clarify](ML-Services/Amazon-SageMaker-Clarify.md)
+- [Amazon SageMaker Endpoints](ML-Services/Amazon-SageMaker-Endpoints.md)
 - [Amazon SageMaker Model Cards](ML-Services/Amazon-SageMaker-Model-Cards.md)
 - [Amazon SageMaker Studio](ML-Services/Amazon-SageMaker-Studio.md)
 
-## Fundamentals (17)
+## Fundamentals (26)
 - [Activation Functions](Fundamentals/Activation-Functions.md)
+- [BERTScore vs RMSE vs MAPE](Fundamentals/BERTScore-vs-RMSE-vs-MAPE.md)
+- [Chain-of-Thought Prompting](Fundamentals/Chain-of-Thought-Prompting.md)
 - [AI/ML Basic Terminology](Fundamentals/AI-ML-Basic-Terminology.md)
 - [Data Wrangling](Fundamentals/Data-Wrangling.md)
 - [Embeddings](Fundamentals/Embeddings.md)
+- [Epoch](Fundamentals/Epoch.md)
 - [Feature Engineering](Fundamentals/Feature-Engineering.md)
 - [Fine-Tuning LLMs](Fundamentals/Fine-Tuning-LLMs.md)
 - [Hyperparameters](Fundamentals/Hyperparameters.md)
 - [Positional Encoding](Fundamentals/Positional-Encoding.md)
+- [Regularization Parameter](Fundamentals/Regularization-Parameter.md)
 - [Tokenization](Fundamentals/Tokenization.md)
 - [AI vs ML vs GenAI vs Deep Learning](Fundamentals/AI-ML-GenAI-DeepLearning-Comparison.md)
 - [Types of Inferencing](Fundamentals/Inference-Types.md)
 - [Data Types in AI Models](Fundamentals/Data-Types-in-AI.md)
 - [Diffusion Models](Fundamentals/Diffusion-Models.md)
 - [Foundation Models](Fundamentals/Foundation-Models.md)
+- [Large Language Models (LLMs)](Fundamentals/Large-Language-Models.md)
 - [Learning Paradigms](Fundamentals/Learning-Paradigms.md)
+- [Model Customization](Fundamentals/Model-Customization.md)
+- [Model Distillation](Fundamentals/Model-Distillation.md)
 - [AI/ML Applications and Value](Fundamentals/AI-ML-Applications-Value.md)
 - [FM Evaluation Metrics](Fundamentals/FM-Evaluation-Metrics.md)
+- [Inference Parameters: Temperature vs Top P vs Top K](Fundamentals/Inference-Parameters-Sampling.md)
+- [Transformer-Based Models](Fundamentals/Transformer-Based-Models.md)
 
 ## ML Fundamentals (3)
 - [ML Evaluation Metrics](ML-Fundamentals/ML-Evaluation-Metrics.md)
@@ -48,7 +58,7 @@
 
 *Note: ML_Hyperparameters.md (root) superseded by Fundamentals/Hyperparameters.md*
 
-## AI Services (14)
+## AI Services (15)
 - [Amazon Augmented AI (A2I)](AI-Services/Amazon-Augmented-AI.md)
 - [Amazon Comprehend](AI-Services/Amazon-Comprehend.md)
 - [Amazon Comprehend Medical](AI-Services/Amazon-Comprehend-Medical.md)
@@ -62,6 +72,7 @@
 - [Amazon Transcribe](AI-Services/Amazon-Transcribe.md)
 - [Amazon Transcribe Medical](AI-Services/Amazon-Transcribe-Medical.md)
 - [Amazon Translate](AI-Services/Amazon-Translate.md)
+- [AWS DeepRacer](AI-Services/AWS-DeepRacer.md)
 - [AWS HealthScribe](AI-Services/AWS-HealthScribe.md)
 
 ## Responsible AI (2)
@@ -71,11 +82,28 @@
 ## AI Infrastructure (1)
 - [AWS AI Hardware (Trainium, Inferentia, Neuron, GPUs)](AI-Infrastructure/AWS-AI-Hardware.md)
 
+## Practice Questions (12)
+- [Overfitting — Customer Turnover Prediction](Practice-Questions/Overfitting-Customer-Turnover.md)
+- [Fine-Tuning FM on Bedrock for Summarization](Practice-Questions/Fine-Tuning-FM-Summarization.md)
+- [Continued Pre-Training for Domain Adaptation](Practice-Questions/Continued-Pre-Training-Domain-Adaptation.md)
+- [Real-Time Inference Deployment](Practice-Questions/Real-Time-Inference-Deployment.md)
+- [Reducing LLM Randomness with Temperature](Practice-Questions/Reducing-LLM-Randomness-Temperature.md)
+- [Bedrock Model Evaluation for FM Assessment](Practice-Questions/Bedrock-Model-Evaluation-FM-Assessment.md)
+- [Limiting FM Output with Max Tokens](Practice-Questions/Limiting-FM-Output-Max-Tokens.md)
+- [How Embeddings Improve LLM Accuracy](Practice-Questions/Embeddings-Improve-LLM-Accuracy.md)
+- [Evaluating Summarization Accuracy with ROUGE](Practice-Questions/Summarization-Accuracy-ROUGE.md)
+- [Diffusion Models for Text-to-Image Generation](Practice-Questions/Diffusion-Models-Text-to-Image.md)
+- [Model Interpretability — Linear Regression](Practice-Questions/Model-Interpretability-Linear-Regression.md)
+- [Prompt Components — Context](Practice-Questions/Prompt-Components-Context.md)
+
+## Security, Compliance & Governance (1)
+- [AWS Audit Manager](Security-Compliance-Governance/AWS-Audit-Manager.md)
+
 ## Quick Reference (2)
 - [Flashcards (105 cards)](Quick-Reference/Flashcards.md)
 - [Cheat Sheet (All 5 Domains)](Quick-Reference/Cheat-Sheet.md)
 
 ---
 
-**Total Files**: 54
+**Total Files**: 77
 **Last Updated**: 2025

@@ -105,15 +105,118 @@ The **primary metric for text summarization**. Measures overlap between generate
 
 ---
 
+### Amazon Bedrock Automated Model Evaluation — Accuracy, Robustness & Toxicity
+
+Amazon Bedrock provides **three evaluation dimensions** for automated model evaluation jobs: **Accuracy**, **Robustness**, and **Toxicity**. Each dimension uses different computed metrics depending on the task type.
+
+> **Exam Tip**: The exam may ask which evaluation dimensions are available in Bedrock automated evaluation. The answer is always **Accuracy + Robustness + Toxicity** (not all task types support all three — text classification does NOT have toxicity).
+
+#### Evaluation Types in Bedrock
+
+| Type | How It Works | When to Use |
+|------|-------------|-------------|
+| **Automatic** | Uses built-in algorithms & benchmark datasets | Quick comparison, no human reviewers needed |
+| **Human-based** | Human reviewers score model outputs | Subjective quality, nuanced evaluation |
+| **LLM-as-a-Judge** | Another FM evaluates the model's outputs | Scalable alternative to human evaluation |
+
+#### Accuracy Metrics by Task Type
+
+| Task Type | Computed Metric | Built-in Dataset(s) | What It Measures | Good Score |
+|-----------|----------------|---------------------|------------------|------------|
+| **General Text Generation** | Real World Knowledge (RWK) Score | TREX | Model's ability to encode factual knowledge about the real world | **High** = accurate |
+| **Text Summarization** | BERTScore | Gigaword | Semantic similarity between generated and reference summaries using BERT embeddings | **High** = accurate |
+| **Question & Answer** | F1 Score (NLP-F1) | BoolQ, NaturalQuestions, TriviaQA | Balance of precision (correct predictions / all predictions) and recall (correct predictions / relevant predictions). Range: 0–1 | **High** = accurate |
+| **Text Classification** | Classification Accuracy Score | Women's Ecommerce Clothing Reviews | Compares predicted class to ground truth label | **High** = accurate |
+
+#### Robustness Metrics by Task Type
+
+Semantic robustness measures **how much the model output changes when the input is slightly perturbed** in meaning-preserving ways.
+
+**Perturbation Types Applied** (all task types):
+- Convert text to all lowercase
+- Keyboard typos
+- Converting numbers to words
+- Random changes to uppercase
+- Random addition/deletion of whitespaces
+- Each prompt is perturbed **~5 times**, then each perturbed prompt is sent for inference
+
+| Task Type | Computed Metric | Built-in Dataset(s) | Calculation | Good Score |
+|-----------|----------------|---------------------|-------------|------------|
+| **General Text Generation** | Word Error Rate (WER) | BOLD, WikiText2, TREX | Measures word-level differences between original and perturbed outputs | **Low** = robust |
+| **Text Summarization** | (Delta BERTScore / BERTScore) × 100 | Gigaword | Percentage change in BERTScore between perturbed and original prompts | **Low** = robust |
+| **Question & Answer** | (Delta F1 / F1) × 100 | BoolQ, NaturalQuestions, TriviaQA | Percentage change in F1 score between perturbed and original prompts | **Low** = robust |
+| **Text Classification** | (Delta Accuracy / Accuracy) × 100 | Women's Ecommerce Clothing Reviews | Percentage change in classification accuracy between perturbed and original prompts | **Low** = robust |
+
+> ⚠️ **Key Insight**: For robustness, **LOW scores = GOOD** (model is stable). For accuracy, **HIGH scores = GOOD**.
+
+#### Toxicity Metrics by Task Type
+
+Toxicity is calculated using the **detoxify algorithm** (open-source, by Unitary AI). It measures whether the model generates racist, sexist, or otherwise harmful/offensive content.
+
+| Task Type | Built-in Dataset(s) | Good Score |
+|-----------|---------------------|------------|
+| **General Text Generation** | RealToxicityPrompts (100K prompts), BOLD (23,679 prompts) | **Low** = safe |
+| **Text Summarization** | Gigaword | **Low** = safe |
+| **Question & Answer** | BoolQ, NaturalQuestions, TriviaQA | **Low** = safe |
+| **Text Classification** | ❌ **Not available** | N/A |
+
+> ⚠️ **Gotcha**: Text classification does NOT support toxicity evaluation in Bedrock automated evaluation.
+
+#### Built-in Datasets Quick Reference
+
+| Dataset | Purpose | Size | Used For |
+|---------|---------|------|----------|
+| **TREX** | Knowledge Base Triples from Wikipedia (subject-predicate-object) | Large | Accuracy (RWK), Robustness (text gen) |
+| **BOLD** | Bias in Open-ended Language Generation — covers profession, gender, race, religion, politics | 23,679 prompts | Robustness, Toxicity (text gen) |
+| **RealToxicityPrompts** | Prompts designed to elicit toxic language | 100,000 prompts | Toxicity (text gen) |
+| **WikiText2** | General text generation prompts from HuggingFace | Medium | Robustness (text gen) |
+| **Gigaword** | News headline summarization | Large | Accuracy, Robustness, Toxicity (summarization) |
+| **BoolQ** | Boolean (yes/no) questions | Medium | Accuracy, Robustness, Toxicity (Q&A) |
+| **NaturalQuestions** | Real Google search questions with Wikipedia answers | Large | Accuracy, Robustness, Toxicity (Q&A) |
+| **TriviaQA** | Trivia questions with evidence documents | Large | Accuracy, Robustness, Toxicity (Q&A) |
+| **Women's Ecommerce Clothing Reviews** | Product review classification | Medium | Accuracy, Robustness (classification) |
+
+#### LLM-as-a-Judge Built-in Metrics (Human-like Evaluation)
+
+When using an evaluator LLM instead of automatic algorithms:
+
+| Metric | What It Measures |
+|--------|------------------|
+| **Correctness** | Is the response correct? (considers ground truth if provided) |
+| **Completeness** | Does the response fully answer the prompt? |
+| **Faithfulness** | Does the response stay faithful to the provided context (no hallucination)? |
+| **Helpfulness** | Is the response useful, coherent, and anticipates user needs? |
+| **Logical Coherence** | Are there logical gaps, inconsistencies, or contradictions? |
+| **Relevance** | Is the response relevant to the prompt? |
+| **Following Instructions** | Does the response respect exact directions in the prompt? |
+| **Professional Style & Tone** | Is the style appropriate for professional settings? |
+| **Harmfulness** | Does the response contain harmful content? |
+| **Stereotyping** | Does the response contain stereotypes (positive or negative)? |
+| **Refusal** | Does the response decline or reject the request? |
+
+> You can also define **custom metrics** with your own evaluation prompts.
+
+#### Summary: Score Interpretation Cheat Sheet
+
+| Dimension | Good Score | Bad Score | Algorithm/Method |
+|-----------|-----------|-----------|------------------|
+| **Accuracy** | HIGH ↑ | LOW | RWK, BERTScore, F1, Classification Accuracy |
+| **Robustness** | LOW ↓ | HIGH | Word Error Rate, Delta metrics with perturbation |
+| **Toxicity** | LOW ↓ | HIGH | Detoxify algorithm |
+
+---
+
 ## 4. Key Features & Components
 
 ### AWS Evaluation Tools
 
 #### Amazon Bedrock Model Evaluation
 - Built-in automatic evaluation for FM comparison
-- Supports human evaluation workflows
-- Evaluates across accuracy, toxicity, and robustness dimensions
-- Can use built-in benchmark datasets or custom datasets
+- Supports human evaluation workflows and LLM-as-a-Judge
+- Evaluates across **accuracy, toxicity, and robustness** dimensions
+- Can use built-in benchmark datasets or custom datasets (JSON Lines in S3)
+- One task type per evaluation job
+- Compare up to 2 models side-by-side
 
 #### SageMaker FMEval
 - Foundation Model Evaluations in SageMaker Studio
@@ -128,8 +231,8 @@ The **primary metric for text summarization**. Measures overlap between generate
 | **Text Summarization** | ROUGE-N, METEOR, BERTScore | Toxicity, Semantic Robustness |
 | **Translation** | BLEU, METEOR | Toxicity |
 | **Q&A** | Exact Match, F1 over Words | Toxicity, Semantic Robustness |
-| **Classification** | Accuracy, Precision, Recall, F1 | Semantic Robustness |
-| **Open-ended Generation** | Factual Knowledge | Toxicity, Prompt Stereotyping, Semantic Robustness |
+| **Classification** | Accuracy, Precision, Recall, F1 | Semantic Robustness (no toxicity) |
+| **Open-ended Generation** | Factual Knowledge (RWK) | Toxicity, Prompt Stereotyping, Semantic Robustness |
 
 ### LLM-as-a-Judge
 - Uses another LLM to evaluate model outputs when reference data is unavailable
@@ -281,4 +384,46 @@ D) AWS Trusted Advisor
 
 ---
 
-**Exam Tip**: When you see "summarization" in a question → think **ROUGE**. When you see "translation" → think **BLEU**. When you see "semantic meaning" or "paraphrasing" → think **BERTScore**. The AIF-C01 exam specifically lists ROUGE, BLEU, and BERTScore as relevant metrics in Task 3.4.
+### Question 4
+**A company runs an automated model evaluation job in Amazon Bedrock for a general text generation task. The robustness score is HIGH. What does this indicate?**
+
+A) The model is very robust and handles input variations well  
+B) The model output changes significantly with minor input perturbations  
+C) The model generates highly toxic content  
+D) The model has high factual accuracy  
+
+**Correct Answer: B) The model output changes significantly with minor input perturbations**
+
+- ✅ **B)** — In Bedrock automated evaluation, robustness is measured by perturbing inputs (typos, case changes, whitespace). A HIGH robustness score means large output changes = the model is NOT robust
+- ❌ A) — This is the opposite. LOW robustness score = model is robust
+- ❌ C) — Toxicity is a separate dimension measured by the detoxify algorithm
+- ❌ D) — Accuracy is a separate dimension (RWK score for text generation)
+
+---
+
+### Question 5
+**Which evaluation dimension is NOT available for text classification tasks in Amazon Bedrock automated model evaluation?**
+
+A) Accuracy  
+B) Robustness  
+C) Toxicity  
+D) All three are available  
+
+**Correct Answer: C) Toxicity**
+
+- ✅ **C) Toxicity** — Text classification in Bedrock automated evaluation only supports Accuracy and Robustness, NOT Toxicity
+- ❌ A) — Accuracy IS available (classification_accuracy_score)
+- ❌ B) — Robustness IS available (delta_classification_accuracy_score)
+- ❌ D) — Incorrect, toxicity is not available for classification
+
+---
+
+**Exam Tip**: When you see "summarization" in a question → think **ROUGE**. When you see "translation" → think **BLEU**. When you see "semantic meaning" or "paraphrasing" → think **BERTScore**. Remember: for Bedrock automated evaluation, **accuracy = HIGH is good**, **robustness = LOW is good**, **toxicity = LOW is good**. The AIF-C01 exam specifically lists ROUGE, BLEU, and BERTScore as relevant metrics in Task 3.4.
+
+---
+
+## Citations
+- [Model evaluation task types in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-tasks.html)
+- [Review metrics for automated model evaluation in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-report-programmatic.html)
+- [General text generation for model evaluation in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-tasks-general-text.html)
+- [Use metrics to understand model performance (LLM-as-a-Judge)](https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation-metrics.html)

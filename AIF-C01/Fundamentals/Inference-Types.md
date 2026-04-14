@@ -33,6 +33,10 @@
 - "Occasional predictions, unpredictable traffic" → Serverless
 - "Chatbot responses" → Real-time (Bedrock on-demand)
 - "Monthly customer segmentation" → Batch
+- "Deploy fine-tuned Bedrock model" → Provisioned Throughput (required)
+- "Guaranteed throughput for production FM" → Provisioned Throughput
+- "Bulk generate summaries with Bedrock" → Bedrock Batch Inference
+- "Handle traffic spikes beyond region capacity" → Cross-Region Inference
 
 ### Anti-patterns
 - Don't use real-time for large batch processing (expensive)
@@ -76,7 +80,8 @@ Immediate predictions with low latency (milliseconds to seconds), synchronous re
 #### Characteristics
 - **Latency**: < 1 second (typically 10-500ms)
 - **Pattern**: Synchronous - client waits for response
-- **Payload Size**: Small to medium (< 6 MB for SageMaker)
+- **Payload Size**: Up to **25 MB** (SageMaker)
+- **Processing Time**: 60 seconds (regular), **8 minutes** (streaming responses)
 - **Use Case**: Interactive applications requiring immediate results
 - **Cost Model**: Pay for provisioned capacity (instance hours)
 - **Scaling**: Auto-scaling based on traffic
@@ -114,8 +119,8 @@ Immediate predictions with low latency (milliseconds to seconds), synchronous re
 ❌ Processing millions of records  
 ❌ Non-urgent batch jobs  
 ❌ Highly variable, unpredictable traffic (consider serverless)  
-❌ Very large payloads (> 6 MB)  
-❌ Long processing times (> 60 seconds)  
+❌ Very large payloads (> 25 MB)  
+❌ Long processing times (> 60 seconds for regular, > 8 min for streaming)  
 
 #### Cost Considerations
 - Charged per instance-hour (even if idle)
@@ -259,7 +264,8 @@ On-demand inference that automatically scales from zero, ideal for intermittent 
 #### Characteristics
 - **Latency**: Seconds (includes cold start)
 - **Pattern**: On-demand, scales from zero
-- **Payload Size**: Medium (< 6 MB)
+- **Payload Size**: Up to **4 MB**
+- **Processing Time**: Up to 60 seconds
 - **Use Case**: Intermittent traffic, development/testing, cost optimization
 - **Cost Model**: Pay per request (no idle costs)
 - **Scaling**: Automatic, scales to zero
@@ -297,7 +303,8 @@ On-demand inference that automatically scales from zero, ideal for intermittent 
 ❌ Consistent high-volume traffic  
 ❌ Strict latency requirements (< 1 second)  
 ❌ Cold start intolerance  
-❌ Very large models (> 6 GB)  
+❌ Payloads > 4 MB  
+❌ Processing times > 60 seconds  
 
 #### Cost Considerations
 - Most cost-effective for low, intermittent traffic
@@ -316,7 +323,68 @@ Sporadic Requests → API Gateway → SageMaker Serverless Endpoint
 
 ---
 
-### 5. Streaming Inference (Real-Time Streaming)
+### 5. Bedrock Inference Modes
+
+Amazon Bedrock offers its own set of inference modes that are distinct from SageMaker:
+
+#### 5a. On-Demand Inference (Bedrock)
+- **How It Works**: Pay-per-token pricing, no upfront commitment
+- **Pricing**: Charged per input token + per output token
+- **Scaling**: Automatic, fully managed
+- **Cold Starts**: None
+- **Best For**: Variable workloads, getting started, development/testing
+- **Exam Tip**: Default mode for Bedrock — simplest to use, no capacity planning needed
+
+#### 5b. Provisioned Throughput (Bedrock)
+- **How It Works**: Purchase dedicated capacity measured in **Model Units (MUs)** for guaranteed throughput
+- **Pricing**: Billed hourly based on model, number of MUs, and commitment duration
+- **Commitment Terms**:
+  - **No commitment** — Delete anytime, highest hourly rate
+  - **1 month** — Cannot delete until term ends, discounted rate
+  - **6 months** — Cannot delete until term ends, most discounted rate
+- **Model Units (MUs)**: Each MU specifies:
+  - Number of input tokens processed per minute across all requests
+  - Number of output tokens generated per minute across all requests
+- **Required For**: Custom models (fine-tuned or continued pre-training) — you MUST purchase Provisioned Throughput to use a custom model
+- **Best For**: Production workloads with predictable high traffic, custom models, guaranteed performance
+- **Exam Tip**: If a question mentions "custom model on Bedrock" + "inference", Provisioned Throughput is required
+
+> 📖 Source: [Provisioned Throughput in Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/prov-throughput.html)
+
+#### 5c. Batch Inference (Bedrock)
+- **How It Works**: Submit large datasets (JSONL files in S3) for offline processing via CreateModelInvocationJob API
+- **Input**: S3 bucket with JSONL files (supports InvokeModel or Converse API format)
+- **Output**: Results written to S3
+- **Requires**: IAM service role with S3 permissions, KMS encryption supported
+- **Best For**: Bulk processing of prompts, non-urgent large-scale generation, cost optimization for high volume
+- **Exam Tip**: Bedrock DOES support batch inference — don't assume it's real-time only
+
+> 📖 Source: [Create a batch inference job - Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-create.html)
+
+#### 5d. Cross-Region Inference (Bedrock)
+- **How It Works**: Routes inference requests across multiple AWS Regions to maximize throughput and manage traffic bursts
+- **Types**:
+  - **Geographic** — Routes within a geographic boundary (e.g., US-only regions)
+  - **Global** — Routes across all supported regions for maximum throughput
+- **Best For**: High-traffic applications, handling traffic spikes, improving availability
+- **Exam Tip**: Use cross-region inference when you need to handle burst traffic beyond a single region's capacity
+
+> 📖 Source: [Cross-Region inference - Amazon Bedrock](https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html)
+
+#### Bedrock Inference Mode Decision Tree
+```
+Using Amazon Bedrock?
+├─ Custom/fine-tuned model? → Provisioned Throughput (REQUIRED)
+├─ Base model?
+│  ├─ Variable/low traffic? → On-Demand (pay-per-token)
+│  ├─ Consistent high traffic, need guaranteed performance? → Provisioned Throughput
+│  ├─ Bulk offline processing? → Batch Inference
+│  └─ Traffic spikes beyond single region? → Cross-Region Inference
+```
+
+---
+
+### 6. Streaming Inference (Real-Time Streaming)
 
 #### Definition
 Continuous processing of streaming data with low latency, often for time-series or event-driven predictions.
@@ -364,7 +432,7 @@ IoT Devices → Kinesis Data Streams → Lambda → SageMaker Endpoint
 
 ---
 
-### 6. Edge Inference (On-Device)
+### 7. Edge Inference (On-Device)
 
 #### Definition
 Run inference on edge devices (IoT, mobile, embedded systems) without cloud connectivity.
@@ -419,12 +487,23 @@ Run inference on edge devices (IoT, mobile, embedded systems) without cloud conn
 |--------|-----------|-------|--------------|------------|-----------|------|
 | **Latency** | < 1 sec | Hours | Seconds-Minutes | Seconds | Milliseconds | Milliseconds |
 | **Pattern** | Sync | Async | Queue | On-demand | Continuous | Local |
-| **Payload** | < 6 MB | Unlimited | < 1 GB | < 6 MB | Small events | Varies |
+| **Payload** | ≤ 25 MB | Unlimited | ≤ 1 GB | ≤ 4 MB | Small events | Varies |
 | **Idle Cost** | Yes | No | No | No | Yes (stream) | No |
 | **Scaling** | Auto-scale | Job-based | Queue-based | Zero-scale | Stream-based | Per-device |
 | **Best For** | Interactive | Bulk | Variable | Intermittent | Continuous | Offline |
 | **SageMaker** | Endpoints | Transform | Async Endpoint | Serverless | + Kinesis | Edge Manager |
-| **Bedrock** | On-demand | N/A | N/A | On-demand | + Kinesis | N/A |
+| **Bedrock** | On-Demand / Provisioned | Batch Inference | N/A | On-Demand | + Kinesis | N/A |
+
+### Bedrock-Specific Inference Comparison
+
+| Aspect | On-Demand | Provisioned Throughput | Batch Inference | Cross-Region |
+|--------|-----------|----------------------|-----------------|---------------|
+| **Pricing** | Per-token | Hourly (MU-based) | Per-token (discounted) | Per-token |
+| **Commitment** | None | None / 1 mo / 6 mo | None | None |
+| **Custom Models** | ❌ | ✅ Required | ❌ | ❌ |
+| **Guaranteed Throughput** | ❌ | ✅ | ❌ | ❌ |
+| **Latency** | Low | Low (dedicated) | Hours | Low |
+| **Best For** | Variable traffic | Production, custom models | Bulk processing | Burst traffic |
 
 ### Decision Matrix for Exam Questions
 
@@ -444,6 +523,10 @@ Question Scenario → Choose This Inference Type
 "Offline mobile app"                           → Edge
 "Cost optimization, non-urgent"                → Batch
 "Variable processing time, large files"        → Asynchronous
+"Custom fine-tuned model on Bedrock"           → Provisioned Throughput
+"Guaranteed throughput for FM"                 → Provisioned Throughput
+"Bulk prompt processing on Bedrock"            → Bedrock Batch Inference
+"Handle traffic spikes across regions"         → Cross-Region Inference
 ```
 
 ### Common Question Types
@@ -487,10 +570,21 @@ Question Scenario → Choose This Inference Type
    - Bedrock on-demand has no cold starts
 
 5. **Payload Size Limits**
-   - Real-Time: 6 MB (SageMaker)
-   - Asynchronous: 1 GB (SageMaker)
+   - Real-Time: **25 MB** (SageMaker)
+   - Serverless: **4 MB** (SageMaker)
+   - Asynchronous: **1 GB** (SageMaker)
    - Batch: Unlimited (processes from S3)
    - Choose based on data size
+
+6. **Bedrock Custom Models Require Provisioned Throughput**
+   - You CANNOT use on-demand inference for fine-tuned or continued pre-trained models
+   - Must purchase Provisioned Throughput (with MUs) to invoke custom models
+   - This is a common exam distractor
+
+7. **Bedrock Batch Inference Exists**
+   - Bedrock supports batch inference via CreateModelInvocationJob
+   - Input/output via S3 (JSONL format)
+   - Don't assume Bedrock is real-time only
 
 ## 6. Best Practices
 
@@ -790,4 +884,4 @@ D) Asynchronous inference with queuing
 
 ---
 
-**Exam Tip**: Match inference type to latency requirements, workload patterns, and cost constraints. Real-time (interactive), Batch (scheduled bulk), Asynchronous (variable/large), Serverless (intermittent), Streaming (continuous), Edge (offline).
+**Exam Tip**: Match inference type to latency requirements, workload patterns, and cost constraints. Real-time (interactive), Batch (scheduled bulk), Asynchronous (variable/large), Serverless (intermittent), Streaming (continuous), Edge (offline). For Bedrock: On-Demand (default), Provisioned Throughput (custom models + guaranteed capacity), Batch Inference (bulk offline), Cross-Region (burst traffic).
