@@ -5,25 +5,37 @@
   - [Task 1.1: Basic AI Concepts and Terminologies](Exam-Domains/Task-1-1-Basic-AI-Concepts.md)
   - [Task 1.2: Practical Use Cases for AI](Exam-Domains/Task-1-2-Practical-Use-Cases-AI.md)
   - [Task 1.3: ML Development Lifecycle](Exam-Domains/Task-1-3-ML-Development-Lifecycle.md)
+  - [Task 3.4: Evaluate FM Performance](Exam-Domains/Task-3-4-Evaluate-FM-Performance.md)
 - [Domain 2: Fundamentals of Generative AI (24%)](Exam-Domains/Domain-2-Fundamentals-Generative-AI.md)
+  - [Task 2.1: Basic Concepts of GenAI](Exam-Domains/Task-2-1-Basic-Concepts-GenAI.md)
 - [Domain 3: Applications of Foundation Models (28%)](Exam-Domains/Domain-3-Applications-Foundation-Models.md)
+  - [Task 3.1: FM Design Considerations](Exam-Domains/Task-3-1-FM-Design-Considerations.md)
+  - [Task 3.2: Prompt Engineering Techniques](Exam-Domains/Task-3-2-Prompt-Engineering-Techniques.md)
+  - [Task 3.3: Training and Fine-Tuning FMs](Exam-Domains/Task-3-3-Training-Fine-Tuning-FMs.md)
 - [Domain 4: Guidelines for Responsible AI (14%)](Exam-Domains/Domain-4-Responsible-AI.md)
+  - [Task 4.1: Responsible AI Development](Exam-Domains/Task-4-1-Responsible-AI-Development.md)
+  - [Task 4.2: Transparent and Explainable Models](Exam-Domains/Task-4-2-Transparent-Explainable-Models.md)
 - [Domain 5: Security, Compliance, and Governance (14%)](Exam-Domains/Domain-5-Security-Compliance-Governance.md)
 
 ## Generative AI Services (2)
 - [Amazon Bedrock](Generative-AI-Services/Amazon-Bedrock.md)
 - [Amazon Nova](Generative-AI-Services/Amazon-Nova.md)
 
-## ML Services (7)
+## ML Services (12)
 - [Amazon SageMaker](ML-Services/Amazon-SageMaker.md)
 - [Amazon SageMaker Assets](ML-Services/Amazon-SageMaker-Assets.md)
 - [Amazon SageMaker Canvas](ML-Services/Amazon-SageMaker-Canvas.md)
 - [Amazon SageMaker Clarify](ML-Services/Amazon-SageMaker-Clarify.md)
+- [Amazon SageMaker DeepAR](ML-Services/Amazon-SageMaker-DeepAR.md)
 - [Amazon SageMaker Endpoints](ML-Services/Amazon-SageMaker-Endpoints.md)
+- [Amazon SageMaker Ground Truth](ML-Services/Amazon-SageMaker-Ground-Truth.md)
+- [Amazon SageMaker JumpStart](ML-Services/Amazon-SageMaker-JumpStart.md)
 - [Amazon SageMaker Model Cards](ML-Services/Amazon-SageMaker-Model-Cards.md)
+- [Amazon SageMaker Pipelines](ML-Services/Amazon-SageMaker-Pipelines.md)
 - [Amazon SageMaker Studio](ML-Services/Amazon-SageMaker-Studio.md)
+- [SageMaker Model Monitor vs Clarify](ML-Services/SageMaker-Model-Monitor-vs-Clarify.md)
 
-## Fundamentals (26)
+## Fundamentals (27)
 - [Activation Functions](Fundamentals/Activation-Functions.md)
 - [BERTScore vs RMSE vs MAPE](Fundamentals/BERTScore-vs-RMSE-vs-MAPE.md)
 - [Chain-of-Thought Prompting](Fundamentals/Chain-of-Thought-Prompting.md)
@@ -49,14 +61,16 @@
 - [AI/ML Applications and Value](Fundamentals/AI-ML-Applications-Value.md)
 - [FM Evaluation Metrics](Fundamentals/FM-Evaluation-Metrics.md)
 - [Inference Parameters: Temperature vs Top P vs Top K](Fundamentals/Inference-Parameters-Sampling.md)
+- [Prompt Engineering Techniques](Fundamentals/Prompt-Engineering-Techniques.md)
 - [Transformer-Based Models](Fundamentals/Transformer-Based-Models.md)
 
-## ML Fundamentals (3)
+## ML Fundamentals (5)
+- [Confusion Matrix](ML-Fundamentals/Confusion-Matrix.md)
 - [ML Evaluation Metrics](ML-Fundamentals/ML-Evaluation-Metrics.md)
 - [ML Regression](ML-Fundamentals/ML-Regression.md)
 - [Learning Paradigms](ML-Fundamentals/Learning-Paradigms.md)
+- [Model Fit, Bias, and Variance](ML-Fundamentals/Model-Fit-Bias-Variance.md)
 
-*Note: ML_Hyperparameters.md (root) superseded by Fundamentals/Hyperparameters.md*
 
 ## AI Services (15)
 - [Amazon Augmented AI (A2I)](AI-Services/Amazon-Augmented-AI.md)
@@ -96,8 +110,16 @@
 - [Model Interpretability — Linear Regression](Practice-Questions/Model-Interpretability-Linear-Regression.md)
 - [Prompt Components — Context](Practice-Questions/Prompt-Components-Context.md)
 
-## Security, Compliance & Governance (1)
+## Security, Compliance & Governance (9)
+- [Amazon Inspector](Security-Compliance-Governance/Amazon-Inspector.md)
+- [Amazon Macie](Security-Compliance-Governance/Amazon-Macie.md)
+- [AWS Artifact](Security-Compliance-Governance/AWS-Artifact.md)
 - [AWS Audit Manager](Security-Compliance-Governance/AWS-Audit-Manager.md)
+- [AWS CloudTrail](Security-Compliance-Governance/AWS-CloudTrail.md)
+- [AWS Config](Security-Compliance-Governance/AWS-Config.md)
+- [AWS Security Hub](Security-Compliance-Governance/AWS-Security-Hub.md)
+- [AWS Trusted Advisor](Security-Compliance-Governance/AWS-Trusted-Advisor.md)
+- [CloudWatch Model Invocation Logging](Security-Compliance-Governance/CloudWatch-Model-Invocation-Logging.md)
 
 ## Quick Reference (2)
 - [Flashcards (105 cards)](Quick-Reference/Flashcards.md)
@@ -105,5 +127,5 @@
 
 ---
 
-**Total Files**: 77
+**Total Files**: 94
 **Last Updated**: 2025

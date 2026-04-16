@@ -288,15 +288,66 @@ Need to evaluate regression model?
 └── Production monitoring → RMSE + R² (SageMaker Model Monitor)
 ```
 
+### ROUGE-N (Recall-Oriented Understudy for Gisting Evaluation)
+
+ROUGE is the **primary metric for evaluating text summarization** in foundation models. While not a traditional ML classification metric, it appears alongside Precision/Recall/F1 in the AIF-C01 exam.
+
+#### What It Measures
+- **N-gram overlap** between machine-generated text and a human-written reference text
+- **Recall-focused**: How much of the reference text is captured in the generated output?
+
+#### Variants
+
+| Variant | N-gram Type | What It Captures |
+|---------|------------|------------------|
+| **ROUGE-1** | Unigrams (single words) | Word-level overlap |
+| **ROUGE-2** | Bigrams (word pairs) | Phrase-level similarity |
+| **ROUGE-L** | Longest Common Subsequence | Sentence-level structure (considers word order, not consecutiveness) |
+| **ROUGE-L-Sum** | LCS for Summarization | Optimized for multi-sentence summaries |
+
+#### Formula
+```
+ROUGE-N = (Count of matching n-grams) / (Count of n-grams in reference)
+```
+
+#### Worked Example (ROUGE-2)
+- **Reference**: "The dog played fetch with the ball in the park"
+- **Generated**: "The dog played with the ball"
+- **Common bigrams**: "the dog", "dog played", "with the", "the ball" → 4
+- **Total bigrams in reference**: 9
+- **ROUGE-2 = 4/9 = 0.444**
+
+#### Key Properties
+- **Score Range**: 0 (no match) to 1 (perfect match)
+- **Case insensitive**
+- **Higher = better**
+- **Limitation**: Unreliable for abstractive summarization (relies on exact word overlap, not meaning)
+- **SageMaker Studio default**: ROUGE-2 (bigrams) with Porter stemmer
+
+#### ROUGE vs. Classification Metrics
+
+| Aspect | ROUGE | Precision/Recall/F1 |
+|--------|-------|--------------------|
+| **Domain** | Text generation / summarization | Classification (binary/multiclass) |
+| **Compares** | Generated text vs. reference text | Predicted labels vs. actual labels |
+| **Focus** | N-gram recall (word overlap) | TP/FP/FN counts |
+| **Used by** | Bedrock Model Evaluation, SageMaker FMEval, Autopilot LLM fine-tuning | SageMaker Autopilot, Model Monitor, Canvas, Clarify |
+
+> **Exam Tip**: If the question mentions "summarization accuracy" or "evaluate summary quality" → **ROUGE**. If it mentions "classification performance" or "fraud/spam detection" → **Precision/Recall/F1/AUC-ROC**.
+
+> Source: [Metrics for fine-tuning LLMs in Autopilot](https://docs.aws.amazon.com/sagemaker/latest/dg/autopilot-llms-finetuning-metrics.html) | [SageMaker Accuracy Evaluation](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-accuracy-evaluation.html)
+
+---
+
 ### FM Metrics vs. ML Metrics (Key Distinction)
 
 | Category | Metrics | Used For |
 |----------|---------|----------|
-| **FM Text Generation** | ROUGE, BLEU, BERTScore | Summarization, translation, text quality |
+| **FM Text Generation** | ROUGE, BLEU, BERTScore, METEOR | Summarization, translation, text quality |
 | **ML Classification** | Accuracy, Precision, Recall, F1, AUC-ROC | Spam, fraud, image classification |
 | **ML Regression** | MAE, MSE, RMSE, R², MAPE | Price prediction, forecasting |
 
-> See also: [FM Evaluation Metrics](../Fundamentals/FM-Evaluation-Metrics.md) for foundation model-specific metrics
+> See also: [FM Evaluation Metrics](../Fundamentals/FM-Evaluation-Metrics.md) for comprehensive foundation model evaluation (ROUGE variants, BLEU, BERTScore, METEOR, Bedrock evaluation dimensions)
 
 ---
 

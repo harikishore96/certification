@@ -176,11 +176,81 @@ Detect bias **after** training — requires model predictions.
 - **Feature Attribution Drift**: Detect when feature importance changes in production
 - Integrates with **SageMaker Model Monitor** for scheduled monitoring
 - Publishes metrics to **CloudWatch** for alerting
+- Uses **Normalized Discounted Cumulative Gain (NDCG)** to compare feature attribution rankings between training data and live data
+  - NDCG range: [0, 1] — where 1 = no drift (rankings identical)
+  - **Alert threshold**: NDCG < 0.90 automatically raises an alert
+  - Sensitive to both ranking order changes AND raw attribution scores
+
+#### Feature Attribution Drift Example
+| Feature | Attribution (Training) | Attribution (Live) |
+|---------|----------------------|--------------------|
+| SAT Score | 0.70 | 0.10 |
+| GPA | 0.50 | 0.20 |
+| Class Rank | 0.05 | 0.70 |
+
+> In this example, the ranking completely reversed → NDCG = 0.69 → alert triggered (below 0.90)
 
 ### 4.5 Online Explainability
 - Real-time explanations from a SageMaker endpoint
 - Get per-instance SHAP values during inference
 - Useful for customer-facing applications requiring instant explanations
+
+### 4.6 Foundation Model Evaluation (FMEval)
+SageMaker Clarify also provides **foundation model evaluation** capabilities for LLMs and generative AI models.
+
+#### Evaluation Methods
+| Method | Description | Tool |
+|--------|-------------|------|
+| **Automatic Evaluation** | Benchmark-based metrics scored programmatically | Studio or `fmeval` library |
+| **Human Evaluation** | Human workers manually evaluate subjective dimensions | Studio only |
+
+#### Supported Task Types
+| Task Type | Description |
+|-----------|-------------|
+| **Open-ended Generation** | Natural human responses without pre-defined structure |
+| **Text Summarization** | Concise summaries retaining key information |
+| **Question Answering** | Relevant and accurate responses to prompts |
+| **Classification** | Assigning categories/labels/scores to text |
+| **Custom** | User-defined evaluation dimensions |
+
+#### Evaluation Dimensions
+| Dimension | What It Measures |
+|-----------|------------------|
+| **Accuracy** | How well model output matches target output (exact match, F1, recall, precision) |
+| **Toxicity** | Harmful, offensive, or inappropriate content in responses |
+| **Semantic Robustness** | Consistency of responses when prompts are slightly perturbed |
+| **Custom Dimensions** | User-defined criteria for specific use cases |
+
+#### Accuracy Metrics for FM Evaluation
+| Metric | Description |
+|--------|-------------|
+| `exact_match_score` | 1 if output exactly matches target, else 0 |
+| `quasi_exact_match_score` | Relaxed exact match (ignores whitespace/punctuation) |
+| `recall_over_words` | Proportion of target words found in model output |
+| `precision_over_words` | Proportion of model output words found in target (measures verbosity) |
+| `f1_score` | Geometric average of precision and recall |
+
+#### Human Evaluation
+- Compare responses from **up to 2 JumpStart models** side-by-side
+- Can also include responses from **models outside AWS**
+- Requires **custom prompt dataset** stored in S3
+- Define custom evaluation criteria (helpfulness, style, coherence)
+- Create **work teams** in Studio to participate in evaluation
+- Best for **subjective dimensions** that automated metrics can't capture
+
+#### Inference Parameters (Configurable in FM Eval)
+| Parameter | Effect |
+|-----------|--------|
+| **Temperature** | Controls randomness — lower = more deterministic |
+| **Top P** | Controls word selection pool — lower = more deterministic |
+| **Max New Tokens** | Controls response length |
+
+#### Prompt Templates
+- Clarify **automatically augments prompts** to match model-specific formats (e.g., `[INST]<<SYS>>` for Llama)
+- Can toggle off automatic templating and provide **custom prompt templates**
+- Same prompt template applies to all datasets within the same evaluation dimension
+
+> **Exam Tip**: FMEval in SageMaker Clarify evaluates foundation models for accuracy, toxicity, and robustness. For subjective evaluation (helpfulness, style), use **human evaluation**. The `fmeval` library allows custom evaluation outside Studio.
 
 ---
 
@@ -216,11 +286,12 @@ Detect bias **after** training — requires model predictions.
 
 | Feature | SageMaker Clarify | SageMaker Debugger | SageMaker Model Monitor |
 |---------|-------------------|-------------------|------------------------|
-| **Purpose** | Bias detection + explainability | Debug training jobs | Monitor production models |
-| **When** | Pre/post-training + production | During training | Production |
-| **Detects** | Bias, feature importance | Vanishing gradients, overfitting | Data drift, model quality |
-| **Output** | Bias reports, SHAP values | Debug rules, tensors | Alerts, violations |
-| **Model needed?** | Only for post-training | Yes (during training) | Yes (deployed) |
+| **Purpose** | Bias detection + explainability + FM evaluation | Debug training jobs | Monitor production models |
+| **When** | Pre/post-training + production + FM eval | During training | Production |
+| **Detects** | Bias, feature importance, toxicity, accuracy | Vanishing gradients, overfitting | Data drift, model quality |
+| **Output** | Bias reports, SHAP values, FM eval reports | Debug rules, tensors | Alerts, violations |
+| **Model needed?** | Only for post-training & FM eval | Yes (during training) | Yes (deployed) |
+| **GenAI support?** | Yes (FMEval) | No | No |
 
 ### Decision Tree
 ```
@@ -230,6 +301,10 @@ Need to understand fairness/bias?
 │   ├── After training? → Post-training bias metrics
 │   ├── In production? → Clarify + Model Monitor (bias drift)
 │   └── Need explanations? → SHAP values / PDPs
+│
+├── Need to evaluate a foundation model? → SageMaker Clarify (FMEval)
+│   ├── Automated metrics (accuracy, toxicity)? → Automatic evaluation
+│   └── Subjective quality (helpfulness, style)? → Human evaluation
 │
 ├── Need to debug training? → SageMaker Debugger
 ├── Need to monitor data quality? → Model Monitor (Data Quality)
@@ -402,4 +477,50 @@ D) Partial Dependence Plots (PDPs)
 
 ---
 
-> **Exam Tip**: When you see keywords like "bias," "fairness," "explainability," "feature importance," or "SHAP" → think **SageMaker Clarify**. Remember the key distinction: pre-training metrics need only data, post-training metrics need data + model predictions.
+---
+
+### Question 4
+**A company wants to evaluate a foundation model deployed on SageMaker JumpStart for toxicity and accuracy before using it in production. They want automated scoring without human reviewers. Which approach should they use?**
+
+A) Use SageMaker Model Monitor to track model quality metrics
+B) Use SageMaker Clarify automatic model evaluation with built-in datasets
+C) Use Amazon Bedrock Guardrails to filter toxic content
+D) Use SageMaker Debugger to analyze model outputs
+
+**Correct Answer: B**
+
+**Explanation**: SageMaker Clarify's FMEval capability supports automatic model evaluation jobs that score foundation model responses for accuracy, toxicity, and semantic robustness using benchmark-based metrics. This can be done via Studio or the `fmeval` library without human reviewers.
+- A is wrong: Model Monitor tracks data/model quality drift in production, not pre-deployment FM evaluation.
+- C is wrong: Bedrock Guardrails filters content at inference time but doesn't evaluate model quality.
+- D is wrong: Debugger analyzes training job issues, not foundation model output quality.
+
+---
+
+### Question 5
+**A data science team notices that the feature importance rankings of their deployed model have changed significantly compared to training. The NDCG score dropped to 0.65. What does this indicate and what triggered the alert?**
+
+A) The model accuracy has dropped below acceptable levels
+B) Feature attribution drift has been detected because NDCG fell below the 0.90 threshold
+C) The training data has become corrupted
+D) The model needs to be retrained with more epochs
+
+**Correct Answer: B**
+
+**Explanation**: SageMaker Clarify uses NDCG (Normalized Discounted Cumulative Gain) to compare feature attribution rankings between training data and live data. An NDCG of 1.0 means rankings are identical. Clarify automatically raises an alert when NDCG drops below 0.90. An NDCG of 0.65 indicates significant feature attribution drift.
+- A is wrong: NDCG measures feature ranking drift, not model accuracy directly.
+- C is wrong: The drift is in live inference data feature attributions, not training data corruption.
+- D is wrong: While retraining may be needed, the NDCG score specifically indicates feature attribution drift, not an epoch-related issue.
+
+---
+
+> **Exam Tip**: When you see keywords like "bias," "fairness," "explainability," "feature importance," or "SHAP" → think **SageMaker Clarify**. Remember the key distinction: pre-training metrics need only data, post-training metrics need data + model predictions. For foundation model evaluation (toxicity, accuracy, robustness) → also think **SageMaker Clarify (FMEval)**.
+
+---
+
+## 9. Citations
+- [Pre-training Data Bias](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-detect-data-bias.html)
+- [Feature Attributions that Use Shapley Values](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-shapley-values.html)
+- [What are Foundation Model Evaluations?](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-foundation-model-evaluate-whatis.html)
+- [Model Evaluation Results](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-foundation-model-reports.html)
+- [Feature Attribution Drift for Models in Production](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-model-monitor-feature-attribution-drift.html)
+- [SHAP Baselines for Explainability](https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-feature-attribute-shap-baselines.html)

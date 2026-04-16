@@ -1,9 +1,17 @@
 # Task 1.3: ML Development Lifecycle
 
 ## Task Overview
-- **Domain**: Domain 1 - Fundamentals of AI and ML
+- **Domain**: Domain 1 - Fundamentals of AI and ML (20%)
 - **Weight**: Medium-High
 - **Exam Focus**: Understanding the complete end-to-end ML workflow from data to production
+
+## Official Exam Objectives (from AIF-C01 Exam Guide)
+1. Describe components of an ML pipeline (data collection, EDA, data pre-processing, feature engineering, model training, hyperparameter tuning, evaluation, deployment, monitoring)
+2. Describe sources of ML models (open source pre-trained models, training custom models)
+3. Describe methods to use a model in production (managed API service, self-hosted API)
+4. Identify relevant AWS services and features for each stage of an ML pipeline (SageMaker AI, Data Wrangler, Feature Store, Model Monitor)
+5. Describe fundamental concepts of MLOps (experimentation, repeatable processes, scalable systems, managing technical debt, achieving production readiness, model monitoring, model re-training)
+6. Describe model performance metrics (accuracy, AUC, F1 score) and business metrics (cost per user, development costs, customer feedback, ROI) to evaluate ML models
 
 ## Learning Objectives
 - Understand each phase of the ML lifecycle
@@ -34,16 +42,19 @@
 
 ---
 
-## Phase 1: Business Problem Definition
+## Phase 1: Business Goal Identification & ML Problem Framing
+
+> Per the [AWS Well-Architected ML Lens](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lifecycle.html), these are the first two phases: **Business Goal Identification** and **ML Problem Framing**.
 
 ### Objective
-Define the business problem and determine if ML is appropriate.
+Define the business problem, determine if ML is appropriate, and frame it as an ML problem.
 
 ### Key Activities
-- **Define Business Goal**: What problem are we solving?
-- **Define Success Metrics**: How do we measure success?
-- **Assess ML Suitability**: Is ML the right approach?
-- **Identify Constraints**: Budget, time, resources, compliance
+- **Define Business Goal**: What problem are we solving? What is the business value?
+- **Define Success Metrics**: Both model metrics (accuracy, F1) AND business metrics (ROI, cost per user)
+- **Assess ML Suitability**: Is ML the right approach? (vs. rule-based, heuristic)
+- **ML Problem Framing**: What is observed (features) and what should be predicted (label/target)?
+- **Identify Constraints**: Budget, time, resources, compliance, explainability requirements
 
 ### Questions to Answer
 - What decision needs to be made?
@@ -51,6 +62,7 @@ Define the business problem and determine if ML is appropriate.
 - What is the expected ROI?
 - Are there regulatory requirements?
 - What is acceptable accuracy?
+- Can the problem be framed as classification, regression, clustering, etc.?
 
 ### ML Problem Types
 - **Classification**: Categorize into classes (spam/not spam)
@@ -68,7 +80,8 @@ Define the business problem and determine if ML is appropriate.
 ```
 Business Problem: Reduce customer churn
 ML Problem Type: Binary classification (churn/no churn)
-Success Metric: Reduce churn by 20%
+Success Metric (Model): F1 Score ≥ 0.85, AUC ≥ 0.90
+Success Metric (Business): Reduce churn by 20%, ROI > 3x development cost
 Data Available: Customer demographics, usage history, support tickets
 Constraints: Must explain predictions (regulated industry)
 ```
@@ -343,6 +356,45 @@ tuner.fit({'train': train_data, 'validation': val_data})
 
 ---
 
+## Sources of ML Models
+
+> **Exam Objective**: Describe sources of ML models (open source pre-trained models, training custom models)
+
+### 1. Open Source Pre-trained Models
+- **What**: Models already trained on large datasets, ready to use or fine-tune
+- **Examples**: Hugging Face models, Meta Llama, Stability AI models
+- **AWS Access**: SageMaker JumpStart, Amazon Bedrock (foundation models)
+- **Pros**: Faster time-to-value, lower cost, no training data needed
+- **Cons**: May not fit specific domain, less control, potential licensing restrictions
+- **Use When**: General-purpose tasks, limited data, quick prototyping
+
+### 2. Training Custom Models
+- **What**: Models trained from scratch on your own data
+- **AWS Access**: SageMaker Training Jobs, SageMaker Built-in Algorithms
+- **Pros**: Tailored to your data/domain, full control, proprietary advantage
+- **Cons**: Requires labeled data, compute resources, ML expertise, longer development
+- **Use When**: Unique domain, proprietary data, specific accuracy requirements
+
+### 3. Fine-tuned Models (Hybrid)
+- **What**: Pre-trained models adapted with your domain-specific data
+- **AWS Access**: Bedrock fine-tuning, SageMaker JumpStart fine-tuning
+- **Pros**: Best of both worlds — pre-trained knowledge + domain specificity
+- **Use When**: Domain-specific tasks where pre-trained models are close but not accurate enough
+
+### Decision Tree: Model Source Selection
+```
+Do you have labeled domain data?
+├── No → Use pre-trained model (Bedrock, JumpStart)
+│         Is accuracy sufficient?
+│         ├── Yes → Deploy as-is
+│         └── No → Collect data → Fine-tune or train custom
+└── Yes → Is the task general-purpose (NLP, vision)?
+          ├── Yes → Fine-tune a pre-trained model
+          └── No (unique domain) → Train custom model
+```
+
+---
+
 ## Phase 5: Model Evaluation
 
 ### Objective
@@ -383,11 +435,25 @@ Assess model performance and determine if it meets business requirements.
 - Evaluate computational costs
 - Assess deployment complexity
 
-**5.5 Business Validation**
+**5.5 Business Metrics Evaluation**
+
+> **Exam Objective**: Describe business metrics (cost per user, development costs, customer feedback, ROI) to evaluate ML models
+
+| Business Metric | Description | Example |
+|----------------|-------------|----------|
+| **ROI (Return on Investment)** | Revenue gained vs. cost of ML solution | Fraud model saves $2M/year, costs $200K → ROI = 10x |
+| **Cost per User** | Total ML cost divided by users served | $50K/month ÷ 100K users = $0.50/user |
+| **Development Costs** | Total cost to build, train, deploy | Compute + data labeling + team time |
+| **Customer Feedback** | User satisfaction with ML-powered features | NPS score, support tickets, adoption rate |
+| **Time to Market** | How quickly the model reaches production | Weeks vs. months |
+| **Operational Cost** | Ongoing inference, monitoring, retraining costs | Monthly endpoint + monitoring costs |
+
+**Key Exam Insight**: The exam tests that you understand BOTH model performance metrics (accuracy, F1, AUC) AND business metrics (ROI, cost per user). A model with 99% accuracy but $10M cost may not be the right choice if a 90% accurate model costs $100K.
+
 - Does model meet business goals?
-- Is accuracy sufficient?
-- Are false positives/negatives acceptable?
-- What is the ROI?
+- Is accuracy sufficient for the business use case?
+- Are false positives/negatives acceptable given business impact?
+- Does the ROI justify the investment?
 
 ### AWS Services
 - **SageMaker Model Evaluation**: Built-in evaluation
@@ -430,6 +496,20 @@ else:
 
 ### Objective
 Deploy model to production for inference.
+
+> **Exam Objective**: Describe methods to use a model in production (managed API service, self-hosted API)
+
+### Methods to Use a Model in Production
+
+| Method | Description | AWS Service | Use Case |
+|--------|-------------|-------------|----------|
+| **Managed API Service** | AWS-hosted, fully managed inference | Bedrock API, Rekognition API, Comprehend API | No infrastructure management, pay-per-use |
+| **Self-hosted API** | You deploy and manage the endpoint | SageMaker Endpoints, EC2 + custom container | Full control, custom models, specific requirements |
+| **Serverless Inference** | Auto-scales to zero, no persistent infra | SageMaker Serverless Inference | Intermittent traffic, cost-sensitive |
+| **Batch Transform** | Process large datasets offline | SageMaker Batch Transform | Scheduled bulk predictions |
+| **Edge Deployment** | Run inference on edge devices | SageMaker Edge Manager, IoT Greengrass | Low latency, offline, IoT |
+
+**Exam Tip**: "Managed API service" = using AWS AI services (Rekognition, Comprehend, Transcribe) where AWS manages everything. "Self-hosted API" = deploying your own model on SageMaker Endpoints or EC2.
 
 ### Key Activities
 
@@ -846,6 +926,15 @@ The AWS Well-Architected Machine Learning Lens defines cross-cutting components 
 - **Auditability**: Versioned inputs/outputs demonstrate exactly how model was built
 - **Data & Model Quality**: Enforce policies against bias, track data statistics and model quality over time
 
+### Managing Technical Debt in ML
+> **Exam Objective**: MLOps includes managing technical debt
+
+- **Data Dependencies**: Unstable data sources, undeclared consumers, feedback loops
+- **Configuration Debt**: Hyperparameters, feature flags, and thresholds scattered across systems
+- **Pipeline Debt**: Glue code, dead experimental paths, unused features
+- **Monitoring Debt**: Lack of alerting, missing baselines, no drift detection
+- **Solution**: MLOps practices (versioning, automation, monitoring) reduce technical debt over time
+
 ---
 
 ## Exam Focus Areas
@@ -988,8 +1077,24 @@ D) SageMaker Clarify
 
 ---
 
+## Quick Reference: Exam Objective → Section Mapping
+
+| Exam Objective | Section in This Document |
+|---------------|-------------------------|
+| Components of an ML pipeline | Phases 1–8 (full lifecycle) |
+| Sources of ML models | Sources of ML Models section |
+| Methods to use a model in production | Phase 6: Model Deployment |
+| AWS services for each pipeline stage | AWS Service Mapping table (Exam Focus) |
+| MLOps concepts | MLOps: Automating the Lifecycle |
+| Model performance + business metrics | Phase 5: Model Evaluation |
+
+---
+
 ## Citations
+- [AIF-C01 Exam Guide - Domain 1](https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html)
+- [Well-Architected ML Lifecycle](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/machine-learning-lifecycle.html)
 - [ML Lifecycle Architecture Diagram - AWS Well-Architected ML Lens](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/architecture-diagram.html)
 - [Monitoring - AWS Well-Architected ML Lens](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/monitoring.html)
+- [Best Practices by ML Lifecycle Phase](https://docs.aws.amazon.com/wellarchitected/latest/machine-learning-lens/best-practices-by-ml-lifecycle-phase.html)
 - [Why Should You Use MLOps? - Amazon SageMaker](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-projects-why.html)
 - [Implement MLOps - Amazon SageMaker AI](https://docs.aws.amazon.com/sagemaker/latest/dg/mlops.html)

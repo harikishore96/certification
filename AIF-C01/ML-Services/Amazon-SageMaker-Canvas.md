@@ -9,6 +9,9 @@
   - Classify text or images based on custom categories
   - Extract information from documents
   - Generate content using foundation models (LLMs)
+  - Identify objects and text in images
+  - Optimize price and revenue
+  - Improve on-time deliveries
 - **Exam Weight**: Medium
 - **Exam Domain**:
   - Domain 1: Fundamentals of AI and ML (20%) — no-code ML development lifecycle
@@ -18,6 +21,8 @@
   - Task 1.3: Describe the ML development lifecycle
   - Task 3.2: Select appropriate FM deployment strategies
   - Task 5.2: Recognize governance and compliance requirements for AI systems
+
+> 📖 **Source**: [Amazon SageMaker Canvas](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html)
 
 ## 2. Exam Keyword Mapping
 - **Trigger Words**: "no-code ML", "business analyst", "visual interface", "non-technical users", "point-and-click", "AutoML without code", "business users build ML models"
@@ -49,6 +54,24 @@ Business User → SageMaker Canvas (Visual UI)
                     ├── Generate Predictions (batch, real-time, what-if)
                     └── MLOps (Model Registry, share with Studio)
 ```
+
+### Canvas Three Pillars (Exam Critical ❗)
+Canvas offers three main ways to work with ML:
+
+| Pillar | Description | Training Required? |
+|--------|-------------|-------------------|
+| **Chat with LLMs** | Prompt open-source and Amazon FMs for content generation, summarization, Q&A | No |
+| **Ready-to-Use Models** | Pre-built models powered by AWS AI Services (Rekognition, Textract, Comprehend) | No |
+| **Custom Models (AutoML)** | Build models trained on your data using visual interface | Yes (automated) |
+
+### Custom Model Types
+Canvas supports these custom model types:
+- **Numeric prediction** (regression)
+- **Categorical prediction for 2 categories** (binary classification)
+- **Categorical prediction for 3+ categories** (multi-class classification)
+- **Time series forecasting**
+- **Single-label image prediction** (image classification)
+- **Multi-category text prediction** (multi-class text classification)
 
 ### Service Limits
 - Workspace instance: Charged per hour ($1.90/hr base)
@@ -297,4 +320,12 @@ D) Canvas ready-to-use models require a SageMaker endpoint for inference
 
 ---
 
-**Exam Tip**: When you see "no-code", "business analyst", "visual interface", or "non-technical users" building ML models in an exam question, think **SageMaker Canvas**. Remember that Canvas is distinct from SageMaker Autopilot (which targets data scientists wanting AutoML) and SageMaker Studio (which is a full IDE for ML engineers). The key differentiator is the **target audience** — Canvas is for business users who cannot write code.
+**Exam Tip**: When you see "no-code", "business analyst", "visual interface", or "non-technical users" building ML models in an exam question, think **SageMaker Canvas**. Remember that Canvas is distinct from SageMaker Autopilot (which targets data scientists wanting AutoML) and SageMaker Studio (which is a full IDE for ML engineers). The key differentiator is the **target audience** — Canvas is for business users who cannot write code. Also remember Canvas has three pillars: Chat with LLMs, Ready-to-Use Models, and Custom Models (AutoML).
+
+> 📖 **Sources**:
+> - [Amazon SageMaker Canvas](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas.html)
+> - [Canvas Foundation Models](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-fm-chat.html)
+> - [Canvas Ready-to-Use Models](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-ready-to-use-models.html)
+> - [Canvas Custom Models](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-custom-models.html)
+> - [Canvas Data Preparation](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-data-prep.html)
+> - [Amazon Q Developer in Canvas](https://docs.aws.amazon.com/sagemaker/latest/dg/canvas-q.html)

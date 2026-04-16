@@ -1,44 +1,42 @@
 # Revision Backlog - AIF-C01
-- Model Fit, Bias, and Variance
-- Supervised, Unsupervised, Self-Supervised
+- ~~Model Fit, Bias, and Variance~~ ✅ (covered in ML-Fundamentals/Model-Fit-Bias-Variance.md)
+- ~~Supervised, Unsupervised, Self-Supervised~~ ✅ (covered in ML-Fundamentals/Learning-Paradigms.md + Fundamentals/Learning-Paradigms.md)
 - Reinforcement, Reinforcement Learning from Human Feedback
-- Confusion Matrix
-- Precision, Recall, F1 Score, Accuracy
-- AUC-ROC - Area under the curve-receiver operator curve
+- ~~Confusion Matrix~~ ✅ (covered in ML-Fundamentals/Confusion-Matrix.md)
+- ~~Precision, Accuracy, Recall, F1 Score, ROUGE-N, AUC-ROC~~ ✅ (covered in ML-Fundamentals/ML-Evaluation-Metrics.md + Fundamentals/FM-Evaluation-Metrics.md)
 - ~~MAE - Mean Absolute Error~~ ✅ (covered in ML-Regression.md)
 - ~~MAPE - Mean Absolute Percentage Error~~ ✅ (covered in ML-Regression.md)
 - ~~RMSE - Root mean squared error~~ ✅ (covered in ML-Regression.md)
 - ~~R Squared~~ ✅ (covered in ML-Regression.md)
 - ~~Regression Metrics~~ ✅ (covered in ML-Regression.md)
-- SageMaker JumpStart Foundation Models
-- SageMaker Model Deployment Comparison / Inference
-- SageMaker - Clarify
-- SageMaker - Ground Truth
-- SageMaker DeepAR
-- SageMaker Pipelines steps
-- SageMaker Model Monitor vs Clarify
-- SageMaker Studio, Canvas
-- AWS Config, Amazon Inspector, AWS Audit Manager, AWS Artifact, AWS CloudTrail, AWS Trusted Advisor
-- Amazon Macie
-- AWS Config
-- Amazon Inspector
-- Security Hub
-- EventBridge
-- AWS CloudTrail
-- AWS Artifact
-- AWS Audit Manager
-- AWS Trusted Advisor
-- Top K, Temperature, Top P
-- ~~BERTScore~~, Mean squared error (MSE), Perplexity, F1 score ✅ (BERTScore covered in BERTScore-vs-RMSE-vs-MAPE.md + FM-Evaluation-Metrics.md)
-- Recall, F1 score, ROUGE-N
-- model evaluation metrics
-- Chain of thought
+- ~~SageMaker JumpStart Foundation Models~~ ✅ (covered in ML-Services/Amazon-SageMaker-JumpStart.md)
+- ~~SageMaker Model Deployment Comparison / Inference~~ ✅ (covered in ML-Services/Amazon-SageMaker-Endpoints.md)
+- ~~SageMaker Clarify~~ ✅ (covered in ML-Services/Amazon-SageMaker-Clarify.md)
+- ~~SageMaker Ground Truth~~ ✅ (covered in Amazon-SageMaker-Ground-Truth.md)
+- ~~SageMaker DeepAR~~ ✅ (covered in ML-Services/Amazon-SageMaker-DeepAR.md)
+- ~~SageMaker Pipelines steps~~ ✅ (covered in ML-Services/Amazon-SageMaker-Pipelines.md)
+- ~~SageMaker Model Monitor vs Clarify~~ ✅ (covered in ML-Services/SageMaker-Model-Monitor-vs-Clarify.md)
+- ~~SageMaker Studio, Canvas~~ ✅ (covered in ML-Services/Amazon-SageMaker-Studio.md + ML-Services/Amazon-SageMaker-Canvas.md)
+- ~~Amazon Macie~~ ✅ (covered in Security-Compliance-Governance/Amazon-Macie.md)
+- ~~AWS Config~~ ✅ (covered in Security-Compliance-Governance/AWS-Config.md)
+- ~~Amazon Inspector~~ ✅ (covered in Security-Compliance-Governance/Amazon-Inspector.md)
+- ~~Security Hub~~ ✅ (covered in Security-Compliance-Governance/AWS-Security-Hub.md)
+- ~~AWS CloudTrail~~ ✅ (covered in Security-Compliance-Governance/AWS-CloudTrail.md)
+- ~~AWS Artifact~~ ✅ (covered in Security-Compliance-Governance/AWS-Artifact.md)
+- ~~AWS Audit Manager~~ ✅ (covered in Security-Compliance-Governance/AWS-Audit-Manager.md)
+- ~~AWS Trusted Advisor~~ ✅ (covered in Security-Compliance-Governance/AWS-Trusted-Advisor.md)
+- ~~Top K, Temperature, Top P~~ ✅ (covered in Fundamentals/Inference-Parameters-Sampling.md + Exam-Domains/Task-2-1-Basic-Concepts-GenAI.md)
+- ~~BERTScore~~, Mean squared error (MSE), Perplexity, ~~F1 score~~ ✅ (BERTScore covered in BERTScore-vs-RMSE-vs-MAPE.md + FM-Evaluation-Metrics.md; F1 in ML-Evaluation-Metrics.md)
+- ~~model evaluation metrics~~ ✅ (covered in Fundamentals/FM-Evaluation-Metrics.md + ML-Fundamentals/ML-Evaluation-Metrics.md)
+- ~~Chain of thought~~ ✅ (covered in Fundamentals/Chain-of-Thought-Prompting.md + Fundamentals/Prompt-Engineering-Techniques.md)
 - Improve Tasks,
-    - 1.3 Describe the ML development lifecycle.
-    - 2.1 Explain the basic concepts of generative AI.
-    - 3.1 Describe design considerations for applications that use foundation models.
-    - 3.2 Choose effective prompt engineering techniques.
-    - 3.3 Describe the training and fine-tuning process for foundation models.
-    - 3.4 Describe methods to evaluate foundation model performance.
-    - 4.1 Explain the development of AI systems that are responsible.
-    - 4.2 Recognize the importance of transparent and explainable models.
+    - ~~1.3 Describe the ML development lifecycle.~~ ✅ (covered in Exam-Domains/Task-1-3-ML-Development-Lifecycle.md)
+    - ~~2.1 Explain the basic concepts of generative AI.~~ ✅ (covered in Exam-Domains/Task-2-1-Basic-Concepts-GenAI.md)
+    - ~~3.1 Describe design considerations for applications that use foundation models.~~ ✅ (covered in Exam-Domains/Task-3-1-FM-Design-Considerations.md)
+    - ~~3.2 Choose effective prompt engineering techniques.~~ ✅ (covered in Fundamentals/Prompt-Engineering-Techniques.md + Exam-Domains/Task-3-2-Prompt-Engineering-Techniques.md)
+    - ~~3.3 Describe the training and fine-tuning process for foundation models.~~ ✅ (covered in Exam-Domains/Task-3-3-Training-Fine-Tuning-FMs.md)
+    - ~~3.4 Describe methods to evaluate foundation model performance.~~ ✅ (covered in Exam-Domains/Task-3-4-Evaluate-FM-Performance.md)
+    - ~~4.1 Explain the development of AI systems that are responsible.~~ ✅ (covered in Exam-Domains/Task-4-1-Responsible-AI-Development.md)
+    - ~~4.2 Recognize the importance of transparent and explainable models.~~ ✅ (covered in Exam-Domains/Task-4-2-Transparent-Explainable-Models.md)
+- ~~Foundation Model~~ ✅ (covered in Fundamentals/Foundation-Models.md + Exam-Domains/Task-2-1-Basic-Concepts-GenAI.md)
+- ~~Temperature, Top P, Top K, Max Tokens~~ ✅ (covered in Fundamentals/Inference-Parameters-Sampling.md + Exam-Domains/Task-2-1-Basic-Concepts-GenAI.md)

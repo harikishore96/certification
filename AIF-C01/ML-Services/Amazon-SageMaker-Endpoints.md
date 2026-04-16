@@ -69,6 +69,7 @@
 - ❌ Don't use serverless endpoints when you need VPC isolation → Use Real-time Endpoints
 - ❌ Don't use batch transform when you need sub-second latency → Use Real-time Endpoints
 - ❌ Don't use async endpoints for tiny payloads needing instant response → Use Real-time Endpoints
+- ❌ Don't use real-time endpoints for payloads > 25 MB → Use Async Endpoints
 
 ---
 
@@ -95,8 +96,8 @@
 | Feature | Real-Time | Serverless | Asynchronous | Batch Transform |
 |---------|-----------|------------|--------------|-----------------|
 | **Latency** | Milliseconds | Seconds (cold start) | Minutes | Minutes–Hours |
-| **Payload Size** | Up to 6 MB | Up to 4 MB | Up to 1 GB | Up to 100 MB/batch |
-| **Processing Time** | Up to 60 sec | Up to 60 sec | Up to 1 hour | No limit |
+| **Payload Size** | Up to 25 MB | Up to 4 MB | Up to 1 GB | Up to 100 MB/batch |
+| **Processing Time** | Up to 60 sec (8 min streaming) | Up to 60 sec | Up to 1 hour | No limit |
 | **Persistent Endpoint** | ✅ Yes | ✅ Yes (scales to 0) | ✅ Yes (scales to 0) | ❌ No |
 | **Scale to Zero** | ❌ No (min 1 instance) | ✅ Yes (on-demand) | ✅ Yes (with auto scaling) | N/A |
 | **GPU Support** | ✅ Yes | ❌ No | ✅ Yes | ✅ Yes |
@@ -366,8 +367,8 @@ Need inference?
 │   │   │       ├── Consistent → Real-Time Endpoint
 │   │   │       └── Sporadic → Serverless Endpoint
 │   │   └── NO → Payload size?
-│   │       ├── > 6 MB → Asynchronous Endpoint
-│   │       └── ≤ 6 MB → Processing time?
+│   │       ├── > 25 MB → Asynchronous Endpoint
+│   │       └── ≤ 25 MB → Processing time?
 │   │           ├── > 60 sec → Asynchronous Endpoint
 │   │           └── ≤ 60 sec → Real-Time or Serverless
 │   └── NO → Batch Transform
@@ -623,4 +624,4 @@ D) A new separate endpoint
 
 ---
 
-**Exam Tip**: The exam loves asking "which inference option" questions. Memorize the key differentiators: payload size limits (4MB serverless, 6MB real-time, 1GB async), scale-to-zero capability (serverless + async only), and GPU support (NOT serverless). When you see "large payload" or "long processing time" → think Async. When you see "sporadic traffic" or "cold starts acceptable" → think Serverless. When you see "thousands of models" → think Multi-Model Endpoint. When you see "safely update model in production" → think Deployment Guardrails (canary/linear with auto-rollback). When you see "optimize model for hardware" → think SageMaker Neo. When you see "simplify deployment" → think ModelBuilder.
+**Exam Tip**: The exam loves asking "which inference option" questions. Memorize the key differentiators: payload size limits (4MB serverless, 25MB real-time, 1GB async), scale-to-zero capability (serverless + async only), and GPU support (NOT serverless). When you see "large payload" or "long processing time" → think Async. When you see "sporadic traffic" or "cold starts acceptable" → think Serverless. When you see "thousands of models" → think Multi-Model Endpoint. When you see "safely update model in production" → think Deployment Guardrails (canary/linear with auto-rollback). When you see "optimize model for hardware" → think SageMaker Neo. When you see "simplify deployment" → think ModelBuilder.
